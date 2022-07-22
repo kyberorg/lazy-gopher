@@ -5,9 +5,9 @@ COMMIT=$(shell git rev-parse --short HEAD)
 BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 TAG=$(shell git describe --tags |cut -d- -f1)
 
-LDFLAGS = -ldflags "-X main.gitTag=${TAG} -X main.gitCommit=${COMMIT} -X main.gitBranch=${BRANCH}"
+LDFLAGS = -ldflags "-s -w -X main.gitTag=${TAG} -X main.gitCommit=${COMMIT} -X main.gitBranch=${BRANCH}"
 
-.PHONY: help clean dep build install uninstall
+.PHONY: help clean dep build install uninstall compress-binary
 
 .DEFAULT_GOAL := help
 
@@ -23,6 +23,9 @@ build: dep ## Build executable.
 	CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o bin/${BINARY} ./cmd/lazy-gopher
 
 binary: build ## Alias to `build`
+
+compress-binary: ## makes binary small.
+	upx --brute bin/${BINARY}
 
 clean: ## Clean build directory.
 	rm -f ./bin/${BINARY}

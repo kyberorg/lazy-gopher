@@ -41,3 +41,15 @@ make binary
 ```shell
  CGO_ENABLED=0 go build github.com/kyberorg/lazy-gopher/cmd/lazy-gopher
 ```
+
+## Compress binary
+**This requires `upx`**
+### With make
+```shell
+make compress-binary
+```
+
+### Without make
+```shell
+upx --brute bin/lazy-gopher
+```
